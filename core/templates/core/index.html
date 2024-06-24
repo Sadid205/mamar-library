@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+{% include 'core/messages.html' %}
+<h1 class="font-bold">Categories : </h1>
+<div class="grid md:grid-cols-7 gap-2">
+  
+    {% if categories %}
+    {% for category in categories %}
+        <a class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none" href="{% url 'category_wise_post' category.slug %}">{{category.name}}</a>
+    {% endfor %}
+    {% else %}
+    <h1 class="text-center font-bold">No categories found!</h1>
+    {% endif %}
+</div>
+<h1 class="font-semibold">{{books|length}} Results Found</h1>
+<div class="flex flex-wrap justify-around">
+    {% if books %}
+    {% for book in books %}
+    <div style="height:500px;width:300px" class="rounded m-4 overflow-hidden shadow-lg">
+        <img style="height:200px;width:300px" src="{{book.image.url}}" alt="Sunset in the mountains">
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">{{book.title}}</div>
+          <p class="text-gray-700 text-base">
+            {{book.description|truncatewords:20}}
+          </p>
+        </div>
+        <div class="px-6 pt-4 pb-2">
+         <h5 class="font-bold">Borrowing Price : {{book.borrowing_price}} &#2547;
+         <h6 class="font-semibold">Reviews : {{book.user_reviews}} out of 5</h6>
+        </h5>
+        </div>
+        <div class="w-full flex justify-center align-center">
+          <a href="{% url 'book_details' book.id %}" class="relativ text-center font-bold w-full inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-600 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
+            <span class="relative w-full px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            Details
+            </span>
+            </a>
+        </div>
+      </div>
+    {% endfor %}
+    {% else %}
+    <div style="width:100vw;height:100vh" class="flex justify-center">
+      <div class="m-auto bg-white rounded-3xl p-4">
+          <h1 class="text-center text-gray-700 font-extrabold">No Book Available At This Moment</h1>
+      </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

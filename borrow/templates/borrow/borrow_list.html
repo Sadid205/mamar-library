@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% block title %}
+Borrow List 
+{% endblock %}
+{% block body %}
+{% if borrowed_books %}
+{% include 'core/messages.html' %}
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Book Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Author
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Borrowing Price
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Quantity
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in borrowed_books %}
+            <tr class="bg-white cursor-pointer border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{data.book.title}}
+                </th>
+                <td class="px-6 py-4">
+                    {{data.book.author}}
+                </td>
+                <td class="px-6 py-4">
+                    {{data.borrow_date}}
+                </td>
+                <td class="px-6 py-4">
+                    {{data.book.borrowing_price}}
+                </td>
+                <td class="px-6 py-4">
+                    {{data.quantity}}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="{% url 'return_book' data.book.id %}" class="bg-gray-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                        Return
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<!-- https://gist.github.com/goodreds/5b8a4a2bf11ff67557d38c5e727ea86c -->
+
+<div style="width:100vw;height:100vh" class="flex justify-center">
+    <div class="m-auto bg-white rounded-3xl p-4">
+        <h1 class="text-center text-gray-700 font-extrabold">No Borrowing Book Available At This Moment</h1>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
