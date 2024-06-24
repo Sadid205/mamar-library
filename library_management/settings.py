@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'library_management.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://mamar_library_user:qA7tSOh23qeqRXpdWbZJoNILXltJXdAd@dpg-cpsg5jd6l47c73e4rlcg-a.oregon-postgres.render.com/mamar_library',
+        default='postgresql://mamar_library_48pa_user:j0foTtR5B8FHfhDSLDFS6OBoxupbcGlw@dpg-cpsmhpqj1k6c738qi92g-a.oregon-postgres.render.com/mamar_library_48pa',
     )
 }
 
