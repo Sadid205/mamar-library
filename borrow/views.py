@@ -17,36 +17,36 @@ def BorrowView(request,id):
 
     try:
         ExistingBorrow = Borrow.objects.get(user=user,book=book)
-        isFound=True
     except:
         ExistingBorrow = None
-        isFound = False
     if book.quantity > 0:
         if user.account.balance>=book.borrowing_price:
             book.quantity -=1
             book.save()
             user.account.balance-=book.borrowing_price
             user.account.save()
+            if ExistingBorrow:
+                ExistingBorrow.quantity+=1
+                ExistingBorrow.save()
+                messages.success(request,f"You have successfully borrowed a book.")
+                send_transaction_email(user,book.borrowing_price,"Successfully Borrowed Books","borrow/borrowed_success_email.html",book)
+                return render(request,'books/book_details.html',{'books':book,'comments':comments})
+            else:
+                newBorrow = Borrow()
+                newBorrow.user = user
+                newBorrow.book = book
+                newBorrow.quantity = 1
+                newBorrow.save()
+                messages.success(request,"You have successfully borrowed a book.")
+                send_transaction_email(user,book.borrowing_price,"Successfully Borrowed Books","borrow/borrowed_success_email.html",book)
+                return render(request,'books/book_details.html',{'books':book,'comments':comments})
         else:
             messages.warning(request,"Your account does not have enough balance")
+            return redirect('home')
+            
     else:
         messages.warning(request,"This book is not available at this moment")
         return redirect('home')
-    
-    if isFound==True:
-        ExistingBorrow.quantity+=1
-        ExistingBorrow.save()
-        messages.success(request,f"You have successfully borrowed a book.")
-        send_transaction_email(user,book.borrowing_price,"Successfully Borrowed Books","borrow/borrowed_success_email.html",book)
-    else:
-        newBorrow = Borrow()
-        newBorrow.user = user
-        newBorrow.book = book
-        newBorrow.quantity = 1
-        newBorrow.save()
-        messages.success(request,"You have successfully borrowed a book.")
-        send_transaction_email(user,book.borrowing_price,"Successfully Borrowed Books","borrow/borrowed_success_email.html",book)
-    return render(request,'books/book_details.html',{'books':book,'comments':comments})
 
 
 class BorrowedBookList(LoginRequiredMixin,ListView):
